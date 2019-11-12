@@ -1,7 +1,13 @@
-# ideasdashboard
+# ideas Dashboard
 
 > vue js application to create ideas dashboard
 
+## Stack Used
+-   Nuxt.js 
+-   Axios 
+-   Less 
+-   AntdV 
+    
 ## Build Setup
 
 ``` bash
@@ -20,3 +26,4 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+For queries please contact suresh (suresh.jain@ymail.com)

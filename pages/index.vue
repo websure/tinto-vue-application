@@ -86,13 +86,12 @@ export default {
     try {
       this.loading = true;
       const res = await axios.get(`/api/v1/idea`);
-      console.log("resp ", res.data.result);
-      this.loading = false;
       this.ideas = res.data.result;
     } catch (err) {
       console.log(err);
-      this.loading = false;
       this.apiErr = true;
+    } finally {
+      this.loading = false;
     }
   },
   methods: {
@@ -102,13 +101,10 @@ export default {
         : this.$message.error(txt, 3);
     },
     async deleteIdea(id) {
-      console.log("deleteIdea ", id);
       if (!id) return;
       try {
         const res = await axios.delete(`/api/v1/idea/${id}`);
-
         const updatedList = this.ideas.filter(val => val.id !== res.data.id);
-        console.log("after delete ", updatedList);
         this.ideas = updatedList;
         this.showMessage("Idea deleted successfully");
       } catch (err) {
@@ -117,11 +113,11 @@ export default {
       }
     },
     async addIdea(value) {
-      console.log("addIdea ", value);
       try {
         const res = await axios.post("/api/v1/idea/", { params: value });
-        console.log("after add ", res);
-        this.ideas.splice(0, 0, res.data);
+        // this.ideas.splice(0, 0, res.data);
+        this.ideas.push(res.data);
+        this.isApiSuccess = { ...res.data, action: "add" };
         this.showMessage("Idea added successfully");
       } catch (err) {
         console.log("unable to add idea ", err);
@@ -129,19 +125,14 @@ export default {
       }
     },
     async updateIdea(obj) {
-      console.log("updateIdea ", obj);
       try {
         const res = await axios.put("/api/v1/idea/", { params: obj });
-        console.log("after update ", res.data);
-
         const tempArr = this.ideas;
-
         const idx = this.ideas.findIndex(val => val.id === obj.id);
         tempArr[idx] = res.data;
         this.ideas = tempArr;
         this.isApiSuccess = { ...res.data, action: "update" };
         this.showMessage("Idea updated successfully");
-        console.log("after update ", this.ideas);
       } catch (err) {
         console.log("unable to add idea ", err);
         this.showMessage("Error in updating ", "error");
@@ -153,7 +144,6 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  padding: 0px 1rem;
   h2 {
     color: #ffff;
   }

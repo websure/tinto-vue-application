@@ -41,12 +41,6 @@
         <span v-if="!editDescription" class="ideaBody" :title="ideas.body">
           {{ ideas.body }}
         </span>
-        <!-- <a-textarea
-          v-if="!editDescription"
-          class="ideaBody"
-          :rows="4"
-          :value="ideas.body"
-        /> -->
       </div>
       <a-textarea
         v-if="editDescription"
@@ -115,7 +109,6 @@ export default {
       }
     },
     editBox(val) {
-      console.log("editBox ", val);
       if (val.hide && val.id === this.ideas.id) {
         this.ideas = this.computeState(val);
         this.title = val.title;
@@ -145,16 +138,9 @@ export default {
       this.showIcon = true;
     },
     inputBlur(newVal, oldVal, attr) {
-      console.log("blur ", newVal, attr, this.ideas.id);
-
       if (newVal.trim().length === 0) {
         if (attr === "title") {
           this.showTitleErr = true;
-          // this.$refs.titleInputRef.$el.focus();
-        } else if (attr === "body") {
-          // this.editDescription = true;
-          // this.showDescriptionErr = null;
-          // this.$refs.descritpionInputRef.$el.focus();
         }
         return;
       }
@@ -164,7 +150,6 @@ export default {
         !this.showDescriptionErr
       ) {
         /* update title */
-        console.log("changed ", attr);
         const obj = { id: this.idea.id };
         obj[attr] = newVal.trim();
         this.$emit("update-idea", obj);
@@ -176,25 +161,12 @@ export default {
       }
     },
     eleClick(type) {
-      console.log("click ", this.ideas.id);
-
       if (type === "title" && !this.editTitle && !this.editDescription) {
         this.editTitle = !this.editTitle;
       } else if (type === "body" && !this.editTitle && !this.editDescription) {
         this.editDescription = !this.editDescription;
       }
-      // if (type === "body" && !this.editTitle) {
-      //   this.editDescription = !this.editDescription;
-      // } else if (type === "title" && !this.editDescription && !this.editTitle) {
-      //   this.editTitle = !this.editTitle;
-      // }
     }
-    // inputChanged() {
-    //   console.log("inputChanged ", this.description.length);
-
-    //   if (this.description.length > 140) {
-    //   }
-    // }
   }
 };
 </script>
@@ -238,45 +210,4 @@ export default {
     }
   }
 }
-
-// .tiles {
-//   height: 150px;
-//   width: 150px;
-//   margin-right: 10px;
-//   margin-bottom: 10px;
-// }
-// .tiles .ant-card-body {
-//   padding: 0.5rem !important;
-// }
-
-// .tiles .close {
-//   /* position: relative;
-//   top: -70px;
-//   display: inline; */
-//   float: right;
-//   padding: 6px;
-// }
-// .tiles h2 {
-//   display: inline-block;
-// }
-// .titleInput:hover {
-//   border-color: #cccc;
-//   resize: none;
-// }
-// .ideaBody {
-//   white-space: nowrap;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-// }
-// .ideaWrapper {
-//   display: flex;
-// }
-// .titleErr {
-//   font-size: 12px;
-//   color: #f5222d;
-// }
-// .titleWarning {
-//   font-size: 12px;
-//   color: #faad14;
-// }
 </style>

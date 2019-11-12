@@ -35,7 +35,6 @@ export default {
         if (err) {
           return;
         }
-        // console.log("Received values of form: ", values);
         this.$emit("add-idea", values);
         form.resetFields();
         this.visible = false;

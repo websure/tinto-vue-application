@@ -44,7 +44,7 @@
                   },
                   {
                     message: 'Maximum of 140 characters allowed',
-                    max: 5
+                    max: 140
                   }
                 ]
               }
@@ -56,7 +56,6 @@
     </a-modal>
   </div>
 </template>
-
 <script>
 export default {
   name: "CreateIdeaForm",
