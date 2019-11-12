@@ -23,7 +23,7 @@ export default {
   components: {
     ListIdeas
   },
-  props: ["ideas", "isApiSuccess"],
+  props: ["ideas", "isApiSuccess", "sortingorder"],
   data() {
     return {
       ideasList: this.ideas,
@@ -33,6 +33,7 @@ export default {
   watch: {
     ideas(value) {
       /* update ideas */
+      console.log("add ideas");
       this.ideasList = this.ideas;
     },
     isApiSuccess(val) {
@@ -41,7 +42,15 @@ export default {
         /* disbale edit box in ideas list */
         this.editBox = { hide: true, ...val };
       }
+    },
+    sortingorder(val) {
+      console.log("sortingorder ", val);
+      this.sortingIdeas(val);
     }
+  },
+  beforeUpdate() {
+    console.log("beforeUpdate");
+    this.sortingorder.length > 0 && this.sortingIdeas();
   },
   methods: {
     deleteIdea(id) {
@@ -50,6 +59,20 @@ export default {
     },
     updateIdea(obj) {
       this.$emit("update-idea", obj);
+    },
+    sortingIdeas(val = this.sortingorder) {
+      console.log("sortingIdeas");
+      this.ideas.sort(function(a, b) {
+        if (val[0] === "title") {
+          return val[1] === "asc"
+            ? a[val[0]] - b[val[0]]
+            : b[val[0]] - a[val[0]];
+        } else if (val[0] === "created_date") {
+          return val[1] === "asc"
+            ? a[val[0]] - b[val[0]]
+            : b[val[0]] - a[val[0]];
+        }
+      });
     }
   }
 };

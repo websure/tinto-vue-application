@@ -2,10 +2,12 @@
   <div class="container">
     <div>
       <AddIdea @add-idea="addIdea" />
+      <SortIdeasList @sort="val => (sortingorder = val)" />
       <a-card :loading="loading" class="dashboard">
         <IdeaDashboard
           :ideas="ideas"
           :is-api-success="isApiSuccess"
+          :sortingorder="sortingorder"
           @delete-idea="deleteIdea"
           @update-idea="updateIdea"
         />
@@ -18,6 +20,7 @@
 import axios from "axios";
 import AddIdea from "../components/AddIdea";
 import IdeaDashboard from "../components/Ideas";
+import SortIdeasList from "../components/SortIdeaList";
 
 export default {
   head() {
@@ -27,13 +30,15 @@ export default {
   },
   components: {
     AddIdea,
-    IdeaDashboard
+    IdeaDashboard,
+    SortIdeasList
   },
   data() {
     return {
       loading: false,
       ideas: [],
-      isApiSuccess: {}
+      isApiSuccess: {},
+      sortingorder: []
     };
   },
   async created() {
@@ -48,6 +53,11 @@ export default {
     }
   },
   methods: {
+    showMessage(txt, type = "success") {
+      type === "success"
+        ? this.$message.success(txt, 3)
+        : this.$message.error(txt, 3);
+    },
     async deleteIdea(id) {
       console.log("deleteIdea ", id);
       if (!id) return;
@@ -57,8 +67,10 @@ export default {
         const updatedList = this.ideas.filter(val => val.id !== res.data.id);
         console.log("after delete ", updatedList);
         this.ideas = updatedList;
+        this.showMessage("Idea deleted successfully");
       } catch (err) {
         console.log("unable to delete ", err);
+        this.showMessage("Error in deleting ", "error");
       }
     },
     async addIdea(value) {
@@ -67,8 +79,10 @@ export default {
         const res = await axios.post("/api/v1/idea/", { params: value });
         console.log("after add ", res);
         this.ideas.splice(0, 0, res.data);
+        this.showMessage("Idea added successfully");
       } catch (err) {
         console.log("unable to add idea ", err);
+        this.showMessage("Error in adding new Idea ", "error");
       }
     },
     async updateIdea(obj) {
@@ -83,9 +97,11 @@ export default {
         tempArr[idx] = res.data;
         this.ideas = tempArr;
         this.isApiSuccess = { ...res.data, action: "update" };
+        this.showMessage("Idea updated successfully");
         console.log("after update ", this.ideas);
       } catch (err) {
         console.log("unable to add idea ", err);
+        this.showMessage("Error in updating ", "error");
       }
     }
   }
