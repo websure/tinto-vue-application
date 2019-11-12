@@ -8,16 +8,17 @@
           editDescription || editTitle || showDescriptionErr
             ? '300px !important'
             : '150px',
-        height: editDescription ? '200px !important' : '150px'
+        height: editDescription ? '200px !important' : '150px',
+        background: '#F7F8FB'
       }"
     >
-      <h3
+      <h2
         v-if="!editTitle"
         @mouseover.once="titleHovered"
         @click="eleClick('title')"
       >
         {{ ideas.title }}
-      </h3>
+      </h2>
       <a-icon
         v-if="showIcon && !editTitle"
         type="close"
@@ -40,6 +41,12 @@
         <span v-if="!editDescription" class="ideaBody" :title="ideas.body">
           {{ ideas.body }}
         </span>
+        <!-- <a-textarea
+          v-if="!editDescription"
+          class="ideaBody"
+          :rows="4"
+          :value="ideas.body"
+        /> -->
       </div>
       <a-textarea
         v-if="editDescription"
@@ -192,44 +199,84 @@ export default {
 };
 </script>
 
-<style>
-.tiles {
-  height: 150px;
-  width: 150px;
-  margin: 10px;
-}
-.tiles .ant-card-body {
-  padding: 0.5rem !important;
+<style lang="less">
+.tilesWrapper {
+  .tiles {
+    height: 150px;
+    width: 150px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    .ant-card-body {
+      padding: 0.5rem !important;
+    }
+    .close {
+      float: right;
+      padding: 6px;
+    }
+    h2 {
+      display: inline-block;
+    }
+    .titleInput:hover {
+      border-color: #cccc;
+      resize: none;
+    }
+    .ideaBody {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ideaWrapper {
+      display: flex;
+    }
+    .titleErr {
+      font-size: 12px;
+      color: #f5222d;
+    }
+    .titleWarning {
+      font-size: 12px;
+      color: #faad14;
+    }
+  }
 }
 
-.tiles .close {
-  /* position: relative;
-  top: -70px;
-  display: inline; */
-  float: right;
-  padding: 6px;
-}
-.tiles h3 {
-  display: inline-block;
-}
-.titleInput:hover {
-  border-color: #cccc;
-  resize: none;
-}
-.ideaBody {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ideaWrapper {
-  display: flex;
-}
-.titleErr {
-  font-size: 12px;
-  color: #f5222d;
-}
-.titleWarning {
-  font-size: 12px;
-  color: #faad14;
-}
+// .tiles {
+//   height: 150px;
+//   width: 150px;
+//   margin-right: 10px;
+//   margin-bottom: 10px;
+// }
+// .tiles .ant-card-body {
+//   padding: 0.5rem !important;
+// }
+
+// .tiles .close {
+//   /* position: relative;
+//   top: -70px;
+//   display: inline; */
+//   float: right;
+//   padding: 6px;
+// }
+// .tiles h2 {
+//   display: inline-block;
+// }
+// .titleInput:hover {
+//   border-color: #cccc;
+//   resize: none;
+// }
+// .ideaBody {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+// .ideaWrapper {
+//   display: flex;
+// }
+// .titleErr {
+//   font-size: 12px;
+//   color: #f5222d;
+// }
+// .titleWarning {
+//   font-size: 12px;
+//   color: #faad14;
+// }
 </style>

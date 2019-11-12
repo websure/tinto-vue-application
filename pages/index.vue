@@ -1,18 +1,58 @@
 <template>
   <div class="container">
-    <div>
-      <AddIdea @add-idea="addIdea" />
-      <SortIdeasList @sort="val => (sortingorder = val)" />
-      <a-card :loading="loading" class="dashboard">
-        <IdeaDashboard
-          :ideas="ideas"
-          :is-api-success="isApiSuccess"
-          :sortingorder="sortingorder"
-          @delete-idea="deleteIdea"
-          @update-idea="updateIdea"
-        />
-      </a-card>
-    </div>
+    <a-layout>
+      <a-layout-header>
+        <a-row type="flex" justify="end">
+          <a-col
+            :xl="{ span: 6, pull: 8 }"
+            :lg="{ span: 6, pull: 8 }"
+            :md="{ span: 8, pull: 6 }"
+            :sm="{ span: 0 }"
+            :xs="{ span: 0 }"
+          >
+            <h2>Idea's Dashboard</h2>
+          </a-col>
+          <a-col
+            :xl="{ span: 3 }"
+            :lg="{ span: 3, offset: 2 }"
+            :md="{ span: 5 }"
+            :sm="{ span: 8 }"
+            :xs="{ span: 12 }"
+          >
+            <SortIdeasList @sort="val => (sortingorder = val)" />
+          </a-col>
+          <a-col
+            :xl="{ span: 2, offset: 2 }"
+            :lg="{ span: 3, offset: 2 }"
+            :md="{ span: 4, offset: 1 }"
+            :sm="{ span: 6, offset: 1 }"
+            :xs="{ span: 8, offset: 2 }"
+          >
+            <AddIdea @add-idea="addIdea" />
+          </a-col>
+        </a-row>
+      </a-layout-header>
+      <a-layout-content>
+        <div>
+          <a-card :loading="loading" class="dashboard">
+            <IdeaDashboard
+              v-if="ideas.length > 0"
+              :ideas="ideas"
+              :is-api-success="isApiSuccess"
+              :sortingorder="sortingorder"
+              @delete-idea="deleteIdea"
+              @update-idea="updateIdea"
+            />
+            <h3 v-if="ideas.length === 0 && !loading && !apiErr">
+              No idea's to display
+            </h3>
+            <h3 v-if="apiErr">
+              Error in fetching data
+            </h3>
+          </a-card>
+        </div>
+      </a-layout-content>
+    </a-layout>
   </div>
 </template>
 
@@ -38,7 +78,8 @@ export default {
       loading: false,
       ideas: [],
       isApiSuccess: {},
-      sortingorder: []
+      sortingorder: [],
+      apiErr: false
     };
   },
   async created() {
@@ -50,6 +91,8 @@ export default {
       this.ideas = res.data.result;
     } catch (err) {
       console.log(err);
+      this.loading = false;
+      this.apiErr = true;
     }
   },
   methods: {
@@ -108,8 +151,11 @@ export default {
 };
 </script>
 
-<style scoped>
-.dashboard {
-  margin: 0.5rem;
+<style lang="less" scoped>
+.container {
+  padding: 0px 1rem;
+  h2 {
+    color: #ffff;
+  }
 }
 </style>

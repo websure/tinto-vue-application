@@ -1,5 +1,9 @@
 <template>
   <div class="wrapper">
+    <h2>
+      Idea's List
+    </h2>
+
     <Grid>
       <Grid.Row class="tilesWrapper">
         <ListIdeas
@@ -40,6 +44,7 @@ export default {
       console.log("isApiSuccess ", val);
       if (val.action === "update") {
         /* disbale edit box in ideas list */
+        // this.sortingIdeas();
         this.editBox = { hide: true, ...val };
       }
     },
@@ -61,29 +66,36 @@ export default {
       this.$emit("update-idea", obj);
     },
     sortingIdeas(val = this.sortingorder) {
-      console.log("sortingIdeas");
-      this.ideas.sort(function(a, b) {
-        if (val[0] === "title") {
-          return val[1] === "asc"
-            ? a[val[0]] - b[val[0]]
-            : b[val[0]] - a[val[0]];
-        } else if (val[0] === "created_date") {
-          return val[1] === "asc"
-            ? a[val[0]] - b[val[0]]
-            : b[val[0]] - a[val[0]];
-        }
-      });
+      console.log("sortingIdeas ");
+      if (this.sortingorder.length === 0) {
+        return;
+      }
+      try {
+        this.ideasList = this.ideas.sort(function(a, b) {
+          if (val[0] === "title") {
+            return val[1] === "asc"
+              ? a[val[0]] - b[val[0]]
+              : b[val[0]] - a[val[0]];
+          } else if (val[0] === "created_date") {
+            return val[1] === "asc"
+              ? a[val[0]] - b[val[0]]
+              : b[val[0]] - a[val[0]];
+          }
+        });
+      } catch (e) {
+        this.ideasList = this.ideas;
+      }
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .wrapper {
   padding: 0.5rem;
-}
-.tilesWrapper {
-  display: flex;
-  flex-wrap: wrap;
+  .tilesWrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 </style>
